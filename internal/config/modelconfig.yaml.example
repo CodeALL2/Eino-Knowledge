@@ -1,0 +1,8 @@
+Emb:
+  APIKey: "your-api-key-here"
+  APIURL: "https://ark.cn-beijing.volces.com/api/v3"
+  ModelName: "doubao-embedding-text-240715"
+
+model:
+  APIKey: "your-api-key-here"
+  ModelName: "doubao-embedding-text-240715"
