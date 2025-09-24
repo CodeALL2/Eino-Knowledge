@@ -13,9 +13,10 @@ type VllmModel struct {
 }
 
 func NewLLMModel(ctx context.Context) *VllmModel {
+	modelConfig := config.GetModelConfig()
 	model, err := ark.NewChatModel(ctx, &ark.ChatModelConfig{
-		APIKey: config.GetModelConfig().APIKey,
-		Model:  config.GetModelConfig().ModelName,
+		APIKey: modelConfig.GetAPIKey(),
+		Model:  modelConfig.GetModelName(),
 	})
 	if err != nil {
 		log.Println(err)

@@ -9,21 +9,68 @@ import (
 
 var globalConfig *config
 
+// 只读配置接口
+type EmbeddingConfig interface {
+	GetAPIKey() string
+	GetAPIURL() string
+	GetModelName() string
+}
+
+type ModelConfig interface {
+	GetAPIKey() string
+	GetModelName() string
+}
+
+type MilvusConfig interface {
+	GetHost() string
+	GetPort() int
+	GetCollection() string
+}
+
+type Config interface {
+	Embedding() EmbeddingConfig
+	Model() ModelConfig
+	Milvus() MilvusConfig
+}
+
+// 内部配置结构体
 type embeddingConfig struct {
 	APIKey    string `yaml:"APIKey"`
 	APIURL    string `yaml:"APIURL"`
 	ModelName string `yaml:"ModelName"`
 }
 
+func (e embeddingConfig) GetAPIKey() string    { return e.APIKey }
+func (e embeddingConfig) GetAPIURL() string    { return e.APIURL }
+func (e embeddingConfig) GetModelName() string { return e.ModelName }
+
 type modelConfig struct {
 	APIKey    string `yaml:"APIKey"`
 	ModelName string `yaml:"ModelName"`
 }
 
+func (m modelConfig) GetAPIKey() string    { return m.APIKey }
+func (m modelConfig) GetModelName() string { return m.ModelName }
+
+type milvusConfig struct {
+	Host       string `yaml:"Host"`
+	Port       int    `yaml:"Port"`
+	Collection string `yaml:"Collection"`
+}
+
+func (m milvusConfig) GetHost() string       { return m.Host }
+func (m milvusConfig) GetPort() int          { return m.Port }
+func (m milvusConfig) GetCollection() string { return m.Collection }
+
 type config struct {
 	EmbeddingConfig embeddingConfig `yaml:"Emb"`
 	ModelConfig     modelConfig     `yaml:"model"`
+	MilvusConfig    milvusConfig    `yaml:"milvus"`
 }
+
+func (c *config) Embedding() EmbeddingConfig { return c.EmbeddingConfig }
+func (c *config) Model() ModelConfig         { return c.ModelConfig }
+func (c *config) Milvus() MilvusConfig       { return c.MilvusConfig }
 
 // findConfigFile 查找配置文件
 func findConfigFile() string {
@@ -74,18 +121,32 @@ func LoadConfig() {
 	log.Printf("配置文件加载成功: %s", configPath)
 }
 
-// GetEmbeddingConfig 获取嵌入配置
-func GetEmbeddingConfig() embeddingConfig {
+// GetConfig 获取全局配置（只读接口）
+func GetConfig() Config {
+	if globalConfig != nil {
+		return globalConfig
+	}
+	return nil
+}
+
+// 为了向后兼容，保留原有的单独获取函数，但返回只读接口
+func GetEmbeddingConfig() EmbeddingConfig {
 	if globalConfig != nil {
 		return globalConfig.EmbeddingConfig
 	}
 	return embeddingConfig{}
 }
 
-// GetModelConfig 获取模型配置
-func GetModelConfig() modelConfig {
+func GetModelConfig() ModelConfig {
 	if globalConfig != nil {
 		return globalConfig.ModelConfig
 	}
 	return modelConfig{}
+}
+
+func GetMilvusConfig() MilvusConfig {
+	if globalConfig != nil {
+		return globalConfig.MilvusConfig
+	}
+	return milvusConfig{}
 }
