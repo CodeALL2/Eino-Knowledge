@@ -1,12 +1,13 @@
 package indexer
 
 import (
+	"Eino-Knowledge/internal/config"
 	"context"
 	"log"
 
-	"Eino-Knowledge/internal/embeddingconfig"
+	"Eino-Knowledge/internal/embedcreate"
 	"Eino-Knowledge/internal/indexer/milvusfiled"
-	"Eino-Knowledge/internal/milvusconfig"
+	"Eino-Knowledge/internal/milvuscli"
 
 	"github.com/cloudwego/eino-ext/components/indexer/milvus"
 	"github.com/cloudwego/eino/schema"
@@ -18,17 +19,17 @@ type MiluvsIndexer struct {
 
 func NewIndexer(ctx context.Context) *MiluvsIndexer {
 	index, err := milvus.NewIndexer(ctx, &milvus.IndexerConfig{
-		Client:     milvusconfig.GetMilvusClient(),     //milvus客户端
-		Collection: milvusconfig.GetMilvusCollection(), //collection名字
+		Client:     milvuscli.GetMilvusClient(),              //milvus客户端
+		Collection: config.GetMilvusConfig().GetCollection(), //collection名字
 		Fields:     milvusfiled.MilvusFiled,
-		Embedding:  embeddingconfig.GetEmbeder(),
+		Embedding:  embedcreate.GetEmbeder(),
 	})
 
 	if err != nil {
 		log.Println(err)
 		return nil
 	}
-	log.Println("milvus索引初始化成功", milvusconfig.GetMilvusCollection())
+	log.Println("milvus索引初始化成功", config.GetMilvusConfig().GetCollection())
 	return &MiluvsIndexer{indexer: index}
 }
 

@@ -1,4 +1,4 @@
-package milvusconfig
+package milvuscli
 
 import (
 	"Eino-Knowledge/internal/config"
@@ -10,14 +10,14 @@ import (
 )
 
 var milvusClient client.Client
-var milvusCollection string
 
 func CreateMilvusClient(ctx context.Context) {
+
 	milvusConfig := config.GetMilvusConfig()
 	fmt.Printf("%s:%d", milvusConfig.GetHost(), milvusConfig.GetPort())
 	client, err := client.NewClient(ctx, client.Config{
 		Address: fmt.Sprintf("%s:%d", milvusConfig.GetHost(), milvusConfig.GetPort()),
-		DBName:  "MyEino",
+		DBName:  milvusConfig.GetDBName(),
 	})
 
 	if err != nil {
@@ -26,13 +26,8 @@ func CreateMilvusClient(ctx context.Context) {
 	}
 	log.Printf("milvus-client初始化成功，连接地址: %s:%d 集合:%s", milvusConfig.GetHost(), milvusConfig.GetPort(), milvusConfig.GetCollection())
 	milvusClient = client
-	milvusCollection = milvusConfig.GetCollection()
 }
 
 func GetMilvusClient() client.Client {
 	return milvusClient
-}
-
-func GetMilvusCollection() string {
-	return milvusCollection
 }

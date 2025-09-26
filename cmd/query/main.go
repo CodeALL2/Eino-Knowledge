@@ -6,7 +6,7 @@ import (
 	"log"
 
 	"Eino-Knowledge/internal/config"
-	"Eino-Knowledge/internal/milvusconfig"
+	"Eino-Knowledge/internal/milvuscli"
 )
 
 func init() {
@@ -16,7 +16,7 @@ func init() {
 
 	ctx := context.Background()
 	log.Println("创建Milvus客户端...")
-	milvusconfig.CreateMilvusClient(ctx)
+	milvuscli.CreateMilvusClient(ctx)
 	log.Println("Milvus客户端创建完成")
 }
 
@@ -24,7 +24,7 @@ func main() {
 	ctx := context.Background()
 	log.Println("开始查询Milvus数据...")
 
-	milvusClient := milvusconfig.GetMilvusClient()
+	milvusClient := milvuscli.GetMilvusClient()
 	collectionName := config.GetMilvusConfig().GetCollection()
 
 	log.Printf("连接到Milvus: %s:%d", config.GetMilvusConfig().GetHost(), config.GetMilvusConfig().GetPort())

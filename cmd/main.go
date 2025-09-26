@@ -5,10 +5,10 @@ import (
 	"log"
 
 	"Eino-Knowledge/internal/config"
-	"Eino-Knowledge/internal/embeddingconfig"
+	"Eino-Knowledge/internal/embedcreate"
 	"Eino-Knowledge/internal/indexer"
 	"Eino-Knowledge/internal/llm"
-	"Eino-Knowledge/internal/milvusconfig"
+	"Eino-Knowledge/internal/milvuscli"
 
 	"github.com/cloudwego/eino/schema"
 	"github.com/google/uuid"
@@ -18,8 +18,8 @@ func init() {
 	config.LoadConfig()
 	ctx := context.Background()
 	llm.NewLLMModel(ctx)
-	embeddingconfig.NewEmbedder(ctx)
-	milvusconfig.CreateMilvusClient(ctx)
+	embedcreate.NewEmbedder(ctx)
+	milvuscli.CreateMilvusClient(ctx)
 }
 
 func main() {

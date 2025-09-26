@@ -1,4 +1,4 @@
-package embeddingconfig
+package embedcreate
 
 import (
 	"Eino-Knowledge/internal/config"

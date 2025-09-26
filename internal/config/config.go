@@ -25,6 +25,7 @@ type MilvusConfig interface {
 	GetHost() string
 	GetPort() int
 	GetCollection() string
+	GetDBName() string
 }
 
 type Config interface {
@@ -56,11 +57,13 @@ type milvusConfig struct {
 	Host       string `yaml:"Host"`
 	Port       int    `yaml:"Port"`
 	Collection string `yaml:"Collection"`
+	DBName     string `yaml:"DBName"`
 }
 
 func (m milvusConfig) GetHost() string       { return m.Host }
 func (m milvusConfig) GetPort() int          { return m.Port }
 func (m milvusConfig) GetCollection() string { return m.Collection }
+func (m milvusConfig) GetDBName() string     { return m.DBName }
 
 type config struct {
 	EmbeddingConfig embeddingConfig `yaml:"Emb"`
