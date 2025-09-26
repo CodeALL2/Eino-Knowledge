@@ -1,6 +1,7 @@
 package main
 
 import (
+	"Eino-Knowledge/internal/fileprocessor/loaderengine/loaderimp"
 	"context"
 	"log"
 
@@ -32,17 +33,28 @@ func main() {
 		return
 	}
 
-	// 创建关于Redis的文档数据
-	redisDocuments := createRedisDocuments()
-
-	// 存储文档到Milvus
-	err := milvusIndexer.StoreBatch(ctx, redisDocuments)
-	if err != nil {
-		log.Printf("文档存储失败: %v", err)
+	loader := loaderimp.NewLoaderEngine(ctx)
+	load, err2 := loader.Load(ctx, "C:\\Users\\chuboshi\\Desktop\\KS-EBG-AR-AF-20240001-P323伟仕佳杰（重庆）科技有限公司（厦门城荣科技有限公司）销售订单-1.pdf", nil)
+	if err2 != nil {
+		log.Printf("文档加载失败: %v", err2)
 		return
 	}
 
-	log.Println("Redis知识库文档存储完成!")
+	for _, doc := range load {
+		log.Println("正在处理文档:", doc.Content)
+	}
+
+	//// 创建关于Redis的文档数据
+	//redisDocuments := createRedisDocuments()
+	//
+	//// 存储文档到Milvus
+	//err := milvusIndexer.StoreBatch(ctx, redisDocuments)
+	//if err != nil {
+	//	log.Printf("文档存储失败: %v", err)
+	//	return
+	//}
+	//
+	//log.Println("Redis知识库文档存储完成!")
 }
 
 // createRedisDocuments 创建关于Redis的文档

@@ -1,9 +1,15 @@
 package test
 
 import (
+	"context"
+	"log"
+	"strings"
 	"testing"
 
 	"Eino-Knowledge/internal/config"
+	"Eino-Knowledge/internal/fileprocessor/loaderengine/loaderimp"
+
+	"github.com/cloudwego/eino/components/document/parser"
 )
 
 func TestLoadConfig(t *testing.T) {
